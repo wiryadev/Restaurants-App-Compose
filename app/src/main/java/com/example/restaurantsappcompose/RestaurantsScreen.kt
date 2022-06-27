@@ -1,6 +1,7 @@
 package com.example.restaurantsappcompose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -9,9 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.Place
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -47,16 +49,40 @@ fun RestaurantItem(
             modifier = Modifier.padding(8.dp),
         ) {
             RestaurantIcon(
-                icon = Icons.Filled.Place,
+                icon = Icons.Rounded.Place,
                 modifier = Modifier.weight(0.15f),
             )
             RestaurantDetails(
                 title = item.title,
                 description = item.description,
-                modifier = Modifier.weight(0.85f)
+                modifier = Modifier.weight(0.70f)
             )
+            FavoriteIcon(Modifier.weight(0.15f))
         }
     }
+}
+
+@Composable
+private fun FavoriteIcon(modifier: Modifier) {
+    var favoriteState by remember {
+        mutableStateOf(false)
+    }
+
+    val icon = if (favoriteState) {
+        Icons.Rounded.Favorite
+    } else {
+        Icons.Rounded.FavoriteBorder
+    }
+
+    Image(
+        imageVector = icon,
+        contentDescription = "Favorite restaurant icon",
+        modifier = modifier
+            .padding(8.dp)
+            .clickable {
+                favoriteState = !favoriteState
+            },
+    )
 }
 
 @Composable
