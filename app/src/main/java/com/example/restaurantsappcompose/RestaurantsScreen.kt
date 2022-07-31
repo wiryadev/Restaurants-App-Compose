@@ -25,6 +25,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun RestaurantsScreen() {
     val viewModel: RestaurantsViewModel = viewModel()
 
+    viewModel.getRestaurants()
+
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
