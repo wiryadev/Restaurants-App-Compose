@@ -18,6 +18,8 @@ class RestaurantsViewModel(
 
     val state = mutableStateOf(emptyList<Restaurant>())
 
+    private lateinit var restaurantsCall: Call<List<Restaurant>>
+
     init {
         val retrofit: Retrofit = Retrofit.Builder()
             .addConverterFactory(
@@ -29,10 +31,13 @@ class RestaurantsViewModel(
             .build()
 
         restInterface = retrofit.create(RestaurantsApiService::class.java)
+
+        getRestaurants()
     }
 
-    fun getRestaurants() {
-        restInterface.getRestaurants().enqueue(
+    private fun getRestaurants() {
+        restaurantsCall = restInterface.getRestaurants()
+        restaurantsCall.enqueue(
             object : Callback<List<Restaurant>> {
                 override fun onResponse(
                     call: Call<List<Restaurant>>,
@@ -49,6 +54,11 @@ class RestaurantsViewModel(
 
             }
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        restaurantsCall.cancel()
     }
 
     fun toggleFavorite(id: Int) {
